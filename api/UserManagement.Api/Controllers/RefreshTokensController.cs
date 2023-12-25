@@ -46,6 +46,7 @@ namespace BloggingApis.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [Authorize]
         [HttpPost]
         [Route("revoke/{username}")]

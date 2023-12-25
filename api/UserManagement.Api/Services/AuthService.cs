@@ -91,16 +91,16 @@ namespace UserManagement.Api.Services
 
         public async Task<TokenViewModel> GetRefreshToken(GetRefreshTokenViewModel model)
         {
-            TokenViewModel _TokenViewModel = new();
+            TokenViewModel token = new();
             var principal = GetPrincipalFromExpiredToken(model.AccessToken);
             string username = principal.Identity.Name;
             var user = await userManager.FindByNameAsync(username);
 
             if (user == null || user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
             {
-                _TokenViewModel.StatusCode = 0;
-                _TokenViewModel.StatusMessage = "Invalid access token or refresh token";
-                return _TokenViewModel;
+                token.StatusCode = 0;
+                token.StatusMessage = "Invalid access token or refresh token";
+                return token;
             }
 
             var authClaims = new List<Claim>
@@ -114,11 +114,11 @@ namespace UserManagement.Api.Services
             user.RefreshToken = newRefreshToken;
             await userManager.UpdateAsync(user);
 
-            _TokenViewModel.StatusCode = 1;
-            _TokenViewModel.StatusMessage = "Success";
-            _TokenViewModel.AccessToken = newAccessToken;
-            _TokenViewModel.RefreshToken = newRefreshToken;
-            return _TokenViewModel;
+            token.StatusCode = 1;
+            token.StatusMessage = "Success";
+            token.AccessToken = newAccessToken;
+            token.RefreshToken = newRefreshToken;
+            return token;
         }
 
 
