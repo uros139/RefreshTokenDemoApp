@@ -50,7 +50,7 @@
       "outputType": "Swagger2",
       "newLineBehavior": "Auto",
       "assemblyPaths": [
-        "C:\\Users\\Administrator\\source\\repos\\ApiRefreshToken\\api\\UserManagement.Api\\bin\\Debug\\net7.0\\UserManagement.Api.dll"
+        "../api/UserManagement.Api/bin/Debug/net7.0/UserManagement.Api.dll"
       ],
       "assemblyConfig": null,
       "referencePaths": [],
