@@ -4,16 +4,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Api.Controllers
 {
-    [Route("api/userlist")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles ="Admin")]
     public class UserListController : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<List<string>>> Get()
         {
-            var uerlist= await Task.FromResult(new string[] { "Virat", "Messi", "Ozil", "Lara", "MS Dhoni" });
-            return Ok(uerlist);
+            var userlist= await Task.FromResult(new string[] { "Virat", "Messi", "Ozil", "Lara", "MS Dhoni" }.ToList());
+            return Ok(userlist);
         }
     }
 }
