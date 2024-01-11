@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +9,15 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
+
 export class AppComponent {
-  title = 'access-refresh-token-demo-app';
+  constructor(private router : Router){
+  }
+  
+  title = 'Students overview app';
+
+ navigateToStudents(){
+    debugger
+    this.router.navigate(['/students-list']);
+  }
 }

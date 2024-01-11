@@ -7,6 +7,11 @@ import { Component } from '@angular/core';
   templateUrl: './students-list.component.html',
   styleUrl: './students-list.component.scss'
 })
-export class StudentsListComponent {
 
+export class StudentsListComponent {
+  private students: string[];
+
+  constructor() {
+    this.students = ["sd"];
+  }
 }
