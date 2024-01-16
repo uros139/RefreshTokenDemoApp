@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\UserManagement.Api"
+    "\\api",
+    "\\api\\UserManagement.Api",
+    "\\api\\UserManagement.Api\\Controllers"
   ],
-  "SelectedNode": "\\UserManagement.Api\\Program.cs",
+  "SelectedNode": "\\api\\UserManagement.Api\\Controllers\\UserListController.cs",
   "PreviewInSolutionExplorer": false
 }

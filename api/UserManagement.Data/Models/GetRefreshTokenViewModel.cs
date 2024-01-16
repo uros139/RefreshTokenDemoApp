@@ -1,8 +1,7 @@
-﻿namespace UserManagement.Data.Models
+﻿namespace UserManagement.Data.Models;
+
+public class GetRefreshTokenViewModel
 {
-    public class GetRefreshTokenViewModel
-    {
-        public string AccessToken { get; set; }
-        public string RefreshToken { get; set; }
-    }
+    public string AccessToken { get; set; }
+    public string RefreshToken { get; set; }
 }
