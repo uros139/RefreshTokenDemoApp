@@ -1,4 +1,6 @@
-<h1>{{title}}</h1>
-
-<a (click)="navigateToStudents()">students</a>
-<router-outlet></router-outlet>
+<mat-toolbar color="primary">
+    <span (click)="navigateToHome()"> {{ title }} </span>
+    <span class="spacer"></span>
+    <button mat-button (click)="navigateToLogin()">Log in</button>
+  </mat-toolbar>
+  <router-outlet></router-outlet>

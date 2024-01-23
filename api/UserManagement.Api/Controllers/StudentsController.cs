@@ -6,8 +6,9 @@ namespace BookStore.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Roles ="Admin")]
-public class UserListController : ControllerBase
+public class StudentsController : ControllerBase
 {
+
     [HttpGet]
     public async Task<ActionResult<List<string>>> Get()
     {

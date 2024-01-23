@@ -253,7 +253,7 @@ export class RefreshTokensClient {
     }
 }
 
-export class UserListClient {
+export class StudentsClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -264,7 +264,7 @@ export class UserListClient {
     }
 
     get(): Promise<string[] | null> {
-        let url_ = this.baseUrl + "/api/UserList";
+        let url_ = this.baseUrl + "/api/Students";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {

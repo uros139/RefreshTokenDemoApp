@@ -1,23 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, MatToolbarModule, MatIconModule, MatButtonModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 
 export class AppComponent {
-  constructor(private router : Router){
+  constructor(private router: Router) {
   }
-  
+
   title = 'Students overview app';
 
- navigateToStudents(){
+  navigateToLogin() {
     debugger
-    this.router.navigate(['/students-list']);
+    this.router.navigate(['/login']);
+  }
+
+  navigateToHome() {
+    debugger
+    this.router.navigate(['']);
   }
 }
