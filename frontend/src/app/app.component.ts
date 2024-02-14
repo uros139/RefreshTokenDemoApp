@@ -24,6 +24,11 @@ export class AppComponent {
     this.router.navigate(['/login']);
   }
 
+  navigateToRegister() {
+    debugger
+    this.router.navigate(['/register']);
+  }
+
   navigateToHome() {
     debugger
     this.router.navigate(['']);

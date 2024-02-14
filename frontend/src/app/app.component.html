@@ -1,6 +1,7 @@
 <mat-toolbar color="primary">
-    <span (click)="navigateToHome()"> {{ title }} </span>
-    <span class="spacer"></span>
-    <button mat-button (click)="navigateToLogin()">Log in</button>
-  </mat-toolbar>
-  <router-outlet></router-outlet>
+  <span (click)="navigateToHome()"> {{ title }} </span>
+  <span class="spacer"></span>
+  <button mat-button (click)="navigateToLogin()">Log in</button>
+  <button mat-button (click)="navigateToRegister()">Register</button>
+</mat-toolbar>
+<router-outlet></router-outlet>
