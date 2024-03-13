@@ -1,7 +1,6 @@
 ﻿using UserManagement.Api.Services;
 using UserManagement.Data.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace BloggingApis.Controllers;
 
@@ -26,9 +25,9 @@ public class AuthenticationController : ControllerBase
     public async Task<ActionResult<TokenViewModel>> Login(LoginModel model)
     {
         try
-            {
+        {
             if (!ModelState.IsValid)
-                return BadRequest("Invalid payload");   
+                return BadRequest("Invalid payload");
             var result = await _authService.Login(model);
             if (result.StatusCode == 0)
                 return BadRequest(result.StatusMessage);
@@ -49,14 +48,14 @@ public class AuthenticationController : ControllerBase
     {
         try
         {
-        if (!ModelState.IsValid)
-            return BadRequest("Invalid payload");
-        var (status, message) = await _authService.Registeration(model, UserRoles.Admin);
-        if (status == 0)
-        {
-            return BadRequest(message);
-        }
-        return CreatedAtAction(nameof(Register), model);
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid payload");
+            var (status, message) = await _authService.Registeration(model, UserRoles.Admin);
+            if (status == 0)
+            {
+                return BadRequest(message);
+            }
+            return CreatedAtAction(nameof(Register), model);
 
         }
         catch (Exception ex)
