@@ -10,19 +10,21 @@ namespace UserManagement.Api.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly UserManager<ApplicationUser> userManager;
-    private readonly RoleManager<IdentityRole> roleManager;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
+    
     public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
     {
-        this.userManager = userManager;
-        this.roleManager = roleManager;
+        _userManager = userManager;
+        _roleManager = roleManager;
         _configuration = configuration;
 
     }
+
     public async Task<(int, string)> Registeration(RegistrationModel model, string role)
     {
-        var userExists = await userManager.FindByNameAsync(model.Username);
+        var userExists = await _userManager.FindByNameAsync(model.Username);
         if (userExists != null)
             return (0, "User already exists");
 
@@ -34,37 +36,37 @@ public class AuthService : IAuthService
             FirstName = model.FirstName,
             LastName = model.LastName,
         };
-        var createUserResult = await userManager.CreateAsync(user, model.Password);
+        var createUserResult = await _userManager.CreateAsync(user, model.Password);
         if (!createUserResult.Succeeded)
             return (0, "User creation failed! Please check user details and try again.");
 
-        if (!await roleManager.RoleExistsAsync(role))
-            await roleManager.CreateAsync(new IdentityRole(role));
+        if (!await _roleManager.RoleExistsAsync(role))
+            await _roleManager.CreateAsync(new IdentityRole(role));
 
-        if (await roleManager.RoleExistsAsync(role))
-            await userManager.AddToRoleAsync(user, role);
+        if (await _roleManager.RoleExistsAsync(role))
+            await _userManager.AddToRoleAsync(user, role);
 
         return (1, "User created successfully!");
     }
 
     public async Task<TokenViewModel> Login(LoginModel model)
     {
-        TokenViewModel _TokenViewModel = new();
-        var user = await userManager.FindByNameAsync(model.Username);
+        var tokenViewModel = new TokenViewModel();
+        var user = await _userManager.FindByNameAsync(model.Username);
         if (user == null)
         {
-            _TokenViewModel.StatusCode = 0;
-            _TokenViewModel.StatusMessage = "Invalid username";
-            return _TokenViewModel;
+            tokenViewModel.StatusCode = 0;
+            tokenViewModel.StatusMessage = "Invalid username";
+            return tokenViewModel;
         }
-        if (!await userManager.CheckPasswordAsync(user, model.Password))
+        if (!await _userManager.CheckPasswordAsync(user, model.Password))
         {
-            _TokenViewModel.StatusCode = 0;
-            _TokenViewModel.StatusMessage = "Invalid password";
-            return _TokenViewModel;
+            tokenViewModel.StatusCode = 0;
+            tokenViewModel.StatusMessage = "Invalid password";
+            return tokenViewModel;
         }
 
-        var userRoles = await userManager.GetRolesAsync(user);
+        var userRoles = await _userManager.GetRolesAsync(user);
         var authClaims = new List<Claim>
         {
            new Claim(ClaimTypes.Name, user.UserName),
@@ -75,32 +77,32 @@ public class AuthService : IAuthService
         {
             authClaims.Add(new Claim(ClaimTypes.Role, userRole));
         }
-        _TokenViewModel.AccessToken = GenerateToken(authClaims);
-        _TokenViewModel.RefreshToken = GenerateRefreshToken();
-        _TokenViewModel.StatusCode = 1;
-        _TokenViewModel.StatusMessage = "Success";
+        tokenViewModel.AccessToken = GenerateToken(authClaims);
+        tokenViewModel.RefreshToken = GenerateRefreshToken();
+        tokenViewModel.StatusCode = 1;
+        tokenViewModel.StatusMessage = "Success";
 
         var _RefreshTokenValidityInDays = Convert.ToInt64(_configuration["JWTKey:RefreshTokenValidityInDays"]);
-        user.RefreshToken = _TokenViewModel.RefreshToken;
+        user.RefreshToken = tokenViewModel.RefreshToken;
         user.RefreshTokenExpiryTime = DateTime.Now.AddDays(_RefreshTokenValidityInDays);
-        await userManager.UpdateAsync(user);
+        await _userManager.UpdateAsync(user);
 
         
-        return _TokenViewModel;
+        return tokenViewModel;
     }
 
     public async Task<TokenViewModel> GetRefreshToken(GetRefreshTokenViewModel model)
     {
-        TokenViewModel token = new();
+        var tokenViewModel = new TokenViewModel();
         var principal = GetPrincipalFromExpiredToken(model.AccessToken);
         string username = principal.Identity.Name;
-        var user = await userManager.FindByNameAsync(username);
+        var user = await _userManager.FindByNameAsync(username);
 
         if (user == null || user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
         {
-            token.StatusCode = 0;
-            token.StatusMessage = "Invalid access token or refresh token";
-            return token;
+            tokenViewModel.StatusCode = 0;
+            tokenViewModel.StatusMessage = "Invalid access token or refresh token";
+            return tokenViewModel;
         }
 
         var authClaims = new List<Claim>
@@ -112,13 +114,13 @@ public class AuthService : IAuthService
         var newRefreshToken = GenerateRefreshToken();
 
         user.RefreshToken = newRefreshToken;
-        await userManager.UpdateAsync(user);
+        await _userManager.UpdateAsync(user);
 
-        token.StatusCode = 1;
-        token.StatusMessage = "Success";
-        token.AccessToken = newAccessToken;
-        token.RefreshToken = newRefreshToken;
-        return token;
+        tokenViewModel.StatusCode = 1;
+        tokenViewModel.StatusMessage = "Success";
+        tokenViewModel.AccessToken = newAccessToken;
+        tokenViewModel.RefreshToken = newRefreshToken;
+        return tokenViewModel;
     }
 
 
@@ -140,6 +142,7 @@ public class AuthService : IAuthService
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
+    
     private static string GenerateRefreshToken()
     {
         var randomNumber = new byte[64];
